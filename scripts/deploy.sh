@@ -9,18 +9,15 @@ if ! command -v kubectl &> /dev/null; then
     exit 1
 fi
 
-# Check if credentials secret exists
-echo "Checking for cloudflared credentials..."
-if ! kubectl get secret cloudflared-creds -n demo &> /dev/null; then
+# Check if tunnel-token secret exists
+echo "Checking for tunnel token..."
+if ! kubectl get secret tunnel-token -n demo &> /dev/null; then
     echo ""
-    echo "Warning: cloudflared-creds secret not found"
-    echo "Please create the secret first:"
-    echo "  kubectl create namespace demo"
-    echo "  kubectl create secret generic cloudflared-creds \\"
-    echo "    --from-file=credentials.json=/path/to/credentials.json \\"
-    echo "    -n demo"
+    echo "Warning: tunnel-token secret not found"
+    echo "The secret will be created from k8s/cloudflared/secret.yaml"
+    echo "Make sure you have created k8s/cloudflared/secret.yaml with your tunnel token"
     echo ""
-    read -p "Continue anyway? (y/n) " -n 1 -r
+    read -p "Continue? (y/n) " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         exit 1
