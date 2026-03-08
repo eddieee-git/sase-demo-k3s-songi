@@ -9,6 +9,5 @@ resources:
   - ssh.yaml
   - rdp.yaml
   - smb.yaml
-  # Uncomment after creating cloudflared/secret.yaml with your tunnel token
-  # - cloudflared/secret.yaml
+  - cloudflared/secret.yaml
   - cloudflared/deployment.yaml
