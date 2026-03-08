@@ -15,25 +15,25 @@ spec:
     spec:
       containers:
       - name: vnc
-        image: dorowu/ubuntu-desktop-lxde-vnc:latest
+        image: accetto/ubuntu-vnc-xfce-g3:latest
         ports:
-        - containerPort: 5900
+        - containerPort: 5901
           name: vnc
-        - containerPort: 6080
+        - containerPort: 6901
           name: novnc
         env:
-        - name: VNC_PASSWORD
+        - name: VNC_PW
           value: "demo"
-        - name: RESOLUTION
+        - name: VNC_RESOLUTION
           value: "1920x1080"
         readinessProbe:
           tcpSocket:
-            port: 5900
+            port: 5901
           initialDelaySeconds: 10
           periodSeconds: 10
         livenessProbe:
           tcpSocket:
-            port: 5900
+            port: 5901
           initialDelaySeconds: 30
           periodSeconds: 20
 ---
@@ -49,10 +49,10 @@ spec:
     app: vnc
   ports:
   - protocol: TCP
-    port: 5900
-    targetPort: 5900
+    port: 5901
+    targetPort: 5901
     name: vnc
   - protocol: TCP
-    port: 6080
-    targetPort: 6080
+    port: 6901
+    targetPort: 6901
     name: novnc
