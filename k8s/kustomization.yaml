@@ -9,5 +9,6 @@ resources:
   - ssh.yaml
   - rdp.yaml
   - smb.yaml
+  - vnc.yaml
   - cloudflared/secret.yaml
   - cloudflared/deployment.yaml

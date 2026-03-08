@@ -19,7 +19,8 @@ Kubernetes Cluster (k3s)
  ├── web service (nginx)
  ├── ssh service (openssh-server)
  ├── rdp service (rdesktop)
- └── smb service (samba)
+ ├── smb service (samba)
+ └── vnc service (ubuntu-desktop-vnc)
 ```
 
 ### 접근 방식
@@ -30,6 +31,7 @@ Kubernetes Cluster (k3s)
 | SSH    | WARP private network | 22 |
 | RDP    | WARP private network | 3389 |
 | SMB    | WARP private network | 445 |
+| VNC    | WARP private network | 5900 (VNC), 6080 (noVNC) |
 
 ## 환경 요구사항
 
@@ -62,6 +64,7 @@ zero-trust-demo/
     ├── ssh.yaml             # openssh-server (ClusterIP: 10.43.0.22)
     ├── rdp.yaml             # rdesktop (ClusterIP: 10.43.0.39)
     ├── smb.yaml             # samba (ClusterIP: 10.43.0.45)
+    ├── vnc.yaml             # ubuntu-desktop-vnc (ClusterIP: 10.43.0.59)
     ├── kustomization.yaml   # Kustomize 설정
     └── cloudflared/
         ├── secret.yaml.example  # Tunnel token 예제
@@ -77,11 +80,12 @@ zero-trust-demo/
 
 ### 고정 Service IP
 
-| 서비스 | ClusterIP  | 용도 |
-|--------|------------|------|
-| SSH    | 10.43.0.22 | WARP private routing |
-| RDP    | 10.43.0.39 | WARP private routing |
-| SMB    | 10.43.0.45 | WARP private routing |
+| 서비스 | ClusterIP  | 포트 | 용도 |
+|--------|------------|------|------|
+| SSH    | 10.43.0.22 | 22 | WARP private routing |
+| RDP    | 10.43.0.39 | 3389 | WARP private routing |
+| SMB    | 10.43.0.45 | 445 | WARP private routing |
+| VNC    | 10.43.0.59 | 5900, 6080 | WARP private routing |
 
 ## 설치 가이드
 
@@ -161,10 +165,12 @@ k get svc -n demo
 NAME                          READY   STATUS    RESTARTS   AGE
 cloudflared-xxxxxxxxxx-xxxxx  1/1     Running   0          1m
 cloudflared-xxxxxxxxxx-xxxxx  1/1     Running   0          1m
+cloudflared-xxxxxxxxxx-xxxxx  1/1     Running   0          1m
 web-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 ssh-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 rdp-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 smb-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
+vnc-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 ```
 
 ## Client VM 설정 (macOS)
@@ -228,6 +234,25 @@ macOS Finder:
    - Username: `demo`
    - Password: `demo`
 
+### VNC (WARP Private Network)
+
+**방법 1: VNC 클라이언트 (권장)**
+
+macOS Screen Sharing 또는 VNC Viewer:
+
+1. Finder → Go → Connect to Server (⌘K)
+2. Server Address: `vnc://10.43.0.59:5900`
+3. Password: `demo`
+
+**방법 2: 브라우저 (noVNC)**
+
+브라우저에서:
+```
+http://10.43.0.59:6080
+```
+
+Password: `demo`
+
 ## 트러블슈팅
 
 Pod 상태 확인:
@@ -270,3 +295,4 @@ k3s 제거:
 - [ ] SSH 접속 가능
 - [ ] RDP 접속 가능
 - [ ] SMB 접속 가능
+- [ ] VNC 접속 가능

@@ -36,6 +36,7 @@ sudo kubectl wait --for=condition=available --timeout=300s \
   deployment/ssh \
   deployment/rdp \
   deployment/smb \
+  deployment/vnc \
   deployment/cloudflared \
   -n demo
 
