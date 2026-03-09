@@ -20,9 +20,9 @@ spec:
         - containerPort: 445
         env:
         - name: USER
-          value: "demo"
+          value: "cloudflare"
         - name: PASS
-          value: "demo"
+          value: "cloudflare"
         volumeMounts:
         - name: smb-data
           mountPath: /share
@@ -37,7 +37,7 @@ metadata:
   namespace: demo
 spec:
   type: ClusterIP
-  clusterIP: 10.43.0.45
+  clusterIP: 10.10.22.45
   selector:
     app: smb
   ports:
