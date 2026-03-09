@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ssh
-  namespace: demo
+  namespace: cloudflare
 spec:
   replicas: 1
   selector:
@@ -28,9 +28,9 @@ spec:
         - name: PASSWORD_ACCESS
           value: "true"
         - name: USER_PASSWORD
-          value: "demo"
+          value: "cloudflare"
         - name: USER_NAME
-          value: "demo"
+          value: "cloudflare"
 ---
 apiVersion: v1
 kind: Service
@@ -39,7 +39,7 @@ metadata:
   namespace: demo
 spec:
   type: ClusterIP
-  clusterIP: 10.43.0.22
+  clusterIP: 10.10.22.22
   selector:
     app: ssh
   ports:
