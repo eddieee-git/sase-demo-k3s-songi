@@ -43,7 +43,7 @@ metadata:
   namespace: demo
 spec:
   type: ClusterIP
-  clusterIP: 10.43.0.39
+  clusterIP: 10.10.22.39
   selector:
     app: rdp
   ports:
