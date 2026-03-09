@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vnc
-  namespace: demo
+  namespace: cloudflare
 spec:
   replicas: 1
   selector:
@@ -21,7 +21,7 @@ spec:
           name: vnc
         env:
         - name: USER
-          value: "demo"
+          value: "cloudflare"
         - name: RESOLUTION
           value: "1920x1080"
         readinessProbe:
@@ -39,10 +39,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: vnc
-  namespace: demo
+  namespace: cloudflare
 spec:
   type: ClusterIP
-  clusterIP: 10.43.0.59
+  clusterIP: 10.10.22.59
   selector:
     app: vnc
   ports:
