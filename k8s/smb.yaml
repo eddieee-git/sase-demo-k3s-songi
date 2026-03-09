@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: smb
-  namespace: demo
+  namespace: cloudflare
 spec:
   replicas: 1
   selector:
@@ -34,7 +34,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: smb
-  namespace: demo
+  namespace: cloudflare
 spec:
   type: ClusterIP
   clusterIP: 10.10.22.45
