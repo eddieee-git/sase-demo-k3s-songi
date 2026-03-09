@@ -17,7 +17,7 @@ Cloudflare Edge
 │  cloudflared (tunnel connector)│
 │       │                        │
 │  ├── web  (nginx)              │
-│  ├── ssh  (openssh-server)     │
+│  ├── ssh  (openssh-server)     │                        
 │  ├── rdp  (rdesktop)           │
 │  ├── smb  (samba)              │
 │  └── vnc  (vnc-desktop)        │
@@ -29,7 +29,7 @@ Cloudflare Edge
 
 | 서비스 | 접근 방식 | 포트 |
 |--------|-----------|------|
-| HTTP   | Public Hostname (Clientless) | 80 |
+| HTTP   | Public Hostname (Clientless) | 80 |        
 | SSH    | WARP private network | 22 |
 | RDP    | WARP private network | 3389 |
 | SMB    | WARP private network | 445 |
@@ -72,10 +72,10 @@ zero-trust-demo/
 └── k8s/
     ├── namespace.yaml       # demo 네임스페이스
     ├── web.yaml             # nginx (ClusterIP)
-    ├── ssh.yaml             # openssh-server (ClusterIP: 10.43.0.22)
-    ├── rdp.yaml             # rdesktop (ClusterIP: 10.43.0.39)
-    ├── smb.yaml             # samba (ClusterIP: 10.43.0.45)
-    ├── vnc.yaml             # vnc-desktop (ClusterIP: 10.43.0.59)
+    ├── ssh.yaml             # openssh-server (ClusterIP: 10.10.22.22)
+    ├── rdp.yaml             # rdesktop (ClusterIP: 10.10.22.39)
+    ├── smb.yaml             # samba (ClusterIP: 10.10.22.45)
+    ├── vnc.yaml             # vnc-desktop (ClusterIP: 10.10.22.59)
     ├── kustomization.yaml   # Kustomize 설정
     └── cloudflared/
         ├── secret.yaml.example  # Tunnel token 예제
@@ -91,17 +91,17 @@ zero-trust-demo/
 
 ### Service CIDR
 ```
-10.43.0.0/16 (k3s default)
+10.10.22.0/24 (k3s default)
 ```
 
 ### 고정 Service IP
 
 | 서비스 | ClusterIP  | 포트 | 용도 |
 |--------|------------|------|------|
-| SSH    | 10.43.0.22 | 22 | WARP private routing |
-| RDP    | 10.43.0.39 | 3389 | WARP private routing |
-| SMB    | 10.43.0.45 | 445 | WARP private routing |
-| VNC    | 10.43.0.59 | 5900 | WARP private routing |
+| SSH    | 10.10.22.22 | 22 | WARP private routing |
+| RDP    | 10.10.22.39 | 3389 | WARP private routing |
+| SMB    | 10.10.22.45 | 445 | WARP private routing |
+| VNC    | 10.10.22.59 | 5900 | WARP private routing |
 
 <br>
 
@@ -191,7 +191,7 @@ vnc-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 
 ** CIDR routes 추가 :**
 - Tunnels → demo-tunnel → CIDR routes
-- CIDR: `10.43.0.0/16`
+- CIDR: `10.10.22.0/16`
 
 ![network_route](docs/images/network_routes.png)
 
@@ -236,7 +236,7 @@ https://web-demo.example.com
 macOS Terminal:
 
 ```bash
-ssh demo@10.43.0.22
+ssh demo@10.10.22.22
 ```
 
 - **Username**: `demo`
@@ -248,7 +248,7 @@ macOS Microsoft Remote Desktop:
 
 1. App Store에서 "Microsoft Remote Desktop" 설치
 2. Add PC
-3. PC name: `10.43.0.39`
+3. PC name: `10.10.22.39`
 4. User account: Add User Account
    - Username: `abc`
    - Password: `abc`
@@ -259,7 +259,7 @@ macOS Microsoft Remote Desktop:
 macOS Finder:
 
 1. Finder → Go → Connect to Server (⌘K)
-2. Server Address: `smb://10.43.0.45`
+2. Server Address: `smb://10.10.22.45`
 3. Connect
 4. Credentials:
    - Username: `demo`
@@ -270,7 +270,7 @@ macOS Finder:
 macOS Screen Sharing 또는 VNC Viewer:
 
 1. Finder → Go → Connect to Server (⌘K)
-2. Server Address: `vnc://10.43.0.59:5900`
+2. Server Address: `vnc://10.10.22.59:5900`
 3. Credentials:
    - **Username**: `demo`
    - **Password**: `ubuntu`
