@@ -15,26 +15,26 @@ spec:
     spec:
       containers:
       - name: vnc
-        image: kasmweb/desktop:1.14.0-rolling-weekly
+        image: consol/ubuntu-xfce-vnc:latest
         ports:
-        - containerPort: 6901
+        - containerPort: 5901
           name: vnc
+        - containerPort: 6901
+          name: novnc
         env:
         - name: VNC_PW
           value: "demo"
-        securityContext:
-          runAsUser: 0
+        - name: VNC_RESOLUTION
+          value: "1920x1080"
         readinessProbe:
-          httpGet:
-            path: /
-            port: 6901
-          initialDelaySeconds: 30
+          tcpSocket:
+            port: 5901
+          initialDelaySeconds: 10
           periodSeconds: 10
         livenessProbe:
-          httpGet:
-            path: /
-            port: 6901
-          initialDelaySeconds: 60
+          tcpSocket:
+            port: 5901
+          initialDelaySeconds: 30
           periodSeconds: 20
 ---
 apiVersion: v1
@@ -49,6 +49,10 @@ spec:
     app: vnc
   ports:
   - protocol: TCP
+    port: 5901
+    targetPort: 5901
+    name: vnc
+  - protocol: TCP
     port: 6901
     targetPort: 6901
-    name: vnc
+    name: novnc
