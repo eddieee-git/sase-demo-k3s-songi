@@ -1,6 +1,5 @@
 # Zero Trust Demo Environment
-
-Cloudflare Zero Trust 데모 환경 구축 프로젝트
+- Cloudflare Zero Trust 데모 환경
 
 ## 아키텍처
 
@@ -11,16 +10,19 @@ Client VM (macOS UTM + WARP)
         │
 Cloudflare Edge
         │
-Cloudflare Tunnel (Token-based)
+        │ Cloudflare Tunnel (Token-based)
         │
-cloudflared Pod (Kubernetes)
-        │
-Kubernetes Cluster (k3s)
- ├── web service (nginx)
- ├── ssh service (openssh-server)
- ├── rdp service (rdesktop)
- ├── smb service (samba)
- └── vnc service (vnc-desktop)
+┌─── Kubernetes Cluster (k3s) ───┐
+│                                │
+│  cloudflared (tunnel connector)│
+│       │                        │
+│  ├── web  (nginx)              │
+│  ├── ssh  (openssh-server)     │
+│  ├── rdp  (rdesktop)           │
+│  ├── smb  (samba)              │
+│  └── vnc  (vnc-desktop)        │
+│                                │
+└────────────────────────────────┘
 ```
 
 ### 접근 방식
@@ -32,6 +34,10 @@ Kubernetes Cluster (k3s)
 | RDP    | WARP private network | 3389 |
 | SMB    | WARP private network | 445 |
 | VNC    | WARP private network | 5900 |
+
+<br>
+
+---
 
 ## 환경 요구사항
 
@@ -48,6 +54,11 @@ Kubernetes Cluster (k3s)
 - **RAM**: 4GB
 - **Disk**: 30GB
 - **역할**: Cloudflare WARP client, SSH/RDP/SMB 테스트
+
+
+<br>
+
+---
 
 ## 프로젝트 구조
 
@@ -71,6 +82,11 @@ zero-trust-demo/
         └── deployment.yaml      # cloudflared (replicas: 2)
 ```
 
+
+<br>
+
+---
+
 ## 네트워크 설계
 
 ### Service CIDR
@@ -86,6 +102,10 @@ zero-trust-demo/
 | RDP    | 10.43.0.39 | 3389 | WARP private routing |
 | SMB    | 10.43.0.45 | 445 | WARP private routing |
 | VNC    | 10.43.0.59 | 5900 | WARP private routing |
+
+<br>
+
+---
 
 ## 설치 가이드
 
@@ -132,20 +152,7 @@ EOF
 
 `YOUR_TUNNEL_TOKEN_HERE`를 실제 토큰으로 교체하세요.
 
-### 3. Cloudflare Dashboard 설정
-
-**Public Hostname 추가:**
-- Subdomain: `web-demo`
-- Domain: `your-domain.com`
-- Service: `http://web.demo.svc.cluster.local:80`
-  + 이 외 RDP/SSH는 브라우저 랜더링 가능 (단 RDP는 윈도우 베이스이기에 해당 데모에서는 불가능합니다.)
-
-**Private Network 추가:**
-- Tunnels → demo-tunnel → Private Networks
-- CIDR: `10.43.0.0/16`
-- 저장
-
-### 4. 배포
+### 3. 배포
 
 ```bash
 cd ~/sase-demo-k3s
@@ -172,6 +179,30 @@ rdp-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 smb-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 vnc-xxxxxxxxxx-xxxxx          1/1     Running   0          1m
 ```
+
+### 4. Cloudflare Dashboard 설정
+
+**Published application routes 추가:**
+- Subdomain: `web`
+- Domain: `your-demo.com`
+- Service: `http://web.demo.svc.cluster.local:80`
+
+![published_apps](docs/images/publised_applications.png)
+
+** CIDR routes 추가 :**
+- Tunnels → demo-tunnel → CIDR routes
+- CIDR: `10.43.0.0/16`
+
+![network_route](docs/images/network_routes.png)
+
+### 5. Access Applications 설정 (Optional)
+- 만일 터널에 등록한 경로에 대하여, 각각의 앱에 대한 접근을 따로 관리하고 싶은 경우 Access에 추가할 수 있습니다.
+
+![access_apps](docs/images/access_applications.png)
+
+<br>
+
+---
 
 ## Client VM 설정 (macOS)
 
@@ -278,12 +309,3 @@ k3s 제거:
 ```bash
 /usr/local/bin/k3s-uninstall.sh
 ```
-
-## 완료 기준
-
-- [ ] 모든 Pod가 Running 상태
-- [ ] HTTP 접속 가능
-- [ ] SSH 접속 가능
-- [ ] RDP 접속 가능
-- [ ] SMB 접속 가능
-- [ ] VNC 접속 가능
