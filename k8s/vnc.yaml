@@ -15,25 +15,23 @@ spec:
     spec:
       containers:
       - name: vnc
-        image: consol/ubuntu-xfce-vnc:latest
+        image: carlonluca/vnc-desktop:jammy-lxqt
         ports:
-        - containerPort: 5901
+        - containerPort: 5900
           name: vnc
-        - containerPort: 6901
-          name: novnc
         env:
-        - name: VNC_PW
+        - name: USER
           value: "demo"
-        - name: VNC_RESOLUTION
+        - name: RESOLUTION
           value: "1920x1080"
         readinessProbe:
           tcpSocket:
-            port: 5901
-          initialDelaySeconds: 10
+            port: 5900
+          initialDelaySeconds: 15
           periodSeconds: 10
         livenessProbe:
           tcpSocket:
-            port: 5901
+            port: 5900
           initialDelaySeconds: 30
           periodSeconds: 20
 ---
@@ -49,10 +47,6 @@ spec:
     app: vnc
   ports:
   - protocol: TCP
-    port: 5901
-    targetPort: 5901
+    port: 5900
+    targetPort: 5900
     name: vnc
-  - protocol: TCP
-    port: 6901
-    targetPort: 6901
-    name: novnc

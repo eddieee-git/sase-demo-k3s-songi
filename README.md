@@ -20,7 +20,7 @@ Kubernetes Cluster (k3s)
  ├── ssh service (openssh-server)
  ├── rdp service (rdesktop)
  ├── smb service (samba)
- └── vnc service (ubuntu-xfce-vnc)
+ └── vnc service (vnc-desktop)
 ```
 
 ### 접근 방식
@@ -31,7 +31,7 @@ Kubernetes Cluster (k3s)
 | SSH    | WARP private network | 22 |
 | RDP    | WARP private network | 3389 |
 | SMB    | WARP private network | 445 |
-| VNC    | WARP private network | 5901 (VNC), 6901 (noVNC) |
+| VNC    | WARP private network | 5900 |
 
 ## 환경 요구사항
 
@@ -64,7 +64,7 @@ zero-trust-demo/
     ├── ssh.yaml             # openssh-server (ClusterIP: 10.43.0.22)
     ├── rdp.yaml             # rdesktop (ClusterIP: 10.43.0.39)
     ├── smb.yaml             # samba (ClusterIP: 10.43.0.45)
-    ├── vnc.yaml             # ubuntu-xfce-vnc (ClusterIP: 10.43.0.59)
+    ├── vnc.yaml             # vnc-desktop (ClusterIP: 10.43.0.59)
     ├── kustomization.yaml   # Kustomize 설정
     └── cloudflared/
         ├── secret.yaml.example  # Tunnel token 예제
@@ -85,7 +85,7 @@ zero-trust-demo/
 | SSH    | 10.43.0.22 | 22 | WARP private routing |
 | RDP    | 10.43.0.39 | 3389 | WARP private routing |
 | SMB    | 10.43.0.45 | 445 | WARP private routing |
-| VNC    | 10.43.0.59 | 5901, 6901 | WARP private routing |
+| VNC    | 10.43.0.59 | 5900 | WARP private routing |
 
 ## 설치 가이드
 
@@ -236,22 +236,13 @@ macOS Finder:
 
 ### VNC (WARP Private Network)
 
-**방법 1: VNC 클라이언트 (권장)**
-
 macOS Screen Sharing 또는 VNC Viewer:
 
 1. Finder → Go → Connect to Server (⌘K)
-2. Server Address: `vnc://10.43.0.59:5901`
-3. Password: `demo`
-
-**방법 2: 브라우저 (noVNC)**
-
-브라우저에서:
-```
-http://10.43.0.59:6901
-```
-
-Password: `demo`
+2. Server Address: `vnc://10.43.0.59:5900`
+3. Credentials:
+   - **Username**: `demo`
+   - **Password**: `ubuntu`
 
 ## 트러블슈팅
 
